@@ -45,7 +45,7 @@ AutoMCP-SQL/
 
 - **Python 3.11+**
 - **[uv](https://docs.astral.sh/uv/getting-started/installation/)** — fast Python package/project manager
-- **[Claude Desktop](https://claude.ai/download)** — to connect the MCP server
+- **[Claude Desktop](https://claude.ai/download)** — to connect the MCP server (optional)
 
 Install `uv` if you don't have it:
 
@@ -88,7 +88,7 @@ This creates `legacy.db` in the project root with sample tables (`users`, `order
 
 ---
 
-### 1. Open your Claude Desktop config file
+### Example: Claude Desktop Configuration
 
 You can access the configuration file directly from within the app:
 1. Open **Claude Desktop**.
