@@ -12,14 +12,14 @@ An MCP server that **autonomously scans any SQLite database**, generates typed C
 | **CRUD Generation** | Creates `get_`, `create_`, `update_`, `delete_` tools per table in memory |
 | **Schema Prompt** | Injects table columns + foreign-key relationships as MCP instructions |
 | **Zero-Knowledge SQL** | Instead of allowing the LLM to write arbitrary SQL (which risks SQL injection and destructive operations), the server generates isolated CRUD tools (Create, Read, Update, Delete) in memory for *each* table. The LLM interacts with these safe, pre-validated python templates |
-| **Configurable DB** | Point at any SQLite file via `DB_PATH` env var; |
+| **Configurable DB** | Point at any SQLite file via `DB_PATH` env var |
 
 ---
 
 ## Project Structure
 
 ```
-mcp_db/
+AutoMCP-SQL/
 ├── server.py        # MCP server — scans DB, generates tools, starts server
 ├── setupdb.py       # One-time script to create and seed legacy.db for testing
 ├── legacy.db        # SQLite database (auto-created by setupdb.py)
@@ -88,18 +88,6 @@ This creates `legacy.db` in the project root with sample tables (`users`, `order
 
 ---
 
-## Running the Server Standalone (optional)
-
-To verify the server starts correctly before connecting to Claude:
-
-```bash
-uv run server.py
-```
-
-You should see the MCP server boot and print the discovered schema. Press `Ctrl+C` to stop.
-
----
-
 ### 1. Open your Claude Desktop config file
 
 You can access the configuration file directly from within the app:
@@ -116,7 +104,7 @@ Replace the path below with the **absolute path** to your cloned `server.py`:
 ```json
 {
   "mcpServers": {
-    "mcp_db": {
+    "AutoMCP-SQL": {
       "command": "uv",
       "args": [
         "run",
@@ -124,10 +112,10 @@ Replace the path below with the **absolute path** to your cloned `server.py`:
         "mcp[cli]",
         "mcp",
         "run",
-        "C:\\Users\\YourName\\Desktop\\Projects\\mcp_db\\server.py"
+        "C:\\Users\\YourName\\Desktop\\Projects\\AutoMCP-SQL\\server.py"
       ],
       "env": {
-        "DB_PATH": "C:\\Users\\YourName\\Desktop\\Projects\\mcp_db\\legacy.db"
+        "DB_PATH": "C:\\Users\\YourName\\Desktop\\Projects\\AutoMCP-SQL\\legacy.db"
       }
     }
   }
@@ -138,7 +126,7 @@ Replace the path below with the **absolute path** to your cloned `server.py`:
 ```json
 {
   "mcpServers": {
-    "mcp_db": {
+    "AutoMCP-SQL": {
       "command": "uv",
       "args": [
         "run",
@@ -146,10 +134,10 @@ Replace the path below with the **absolute path** to your cloned `server.py`:
         "mcp[cli]",
         "mcp",
         "run",
-        "/home/yourname/projects/mcp_db/server.py"
+        "/home/yourname/projects/AutoMCP-SQL/server.py"
       ],
       "env": {
-        "DB_PATH": "/home/yourname/projects/mcp_db/legacy.db"
+        "DB_PATH": "/home/yourname/projects/AutoMCP-SQL/legacy.db"
       }
     }
   }
@@ -164,7 +152,7 @@ Fully quit and reopen Claude Desktop. The MCP server starts automatically when C
 
 ### 4. Verify the connection
 
-Open a new conversation in Claude Desktop. Click the **plus icon (+)** in the chat input area, select **Connectors**, and then click **Manage connectors**. Here, you will see `mcp_db` listed along with all the tools the MCP has access to (like `get_users`, `create_orders`, etc.).
+Open a new conversation in Claude Desktop. Click the **plus icon (+)** in the chat input area, select **Connectors**, and then click **Manage connectors**. Here, you will see `AutoMCP-SQL` listed along with all the tools the MCP has access to (like `get_users`, `create_orders`, etc.).
 
 You can also just ask Claude:
 > *"What tables do you have access to?"*
@@ -215,7 +203,7 @@ This means even a prompt-injected or jailbroken model cannot run `DROP TABLE` or
 ## Troubleshooting
 
 **Server doesn't appear in Claude Desktop**
-- Wait for few seconds, it takes some time to load.
+- Wait a few seconds; it may take some time to load.
 - Double-check the path in `claude_desktop_config.json` — it must be the absolute path to `server.py`, not a folder.
 - Make sure `uv` is on your system PATH (open a new terminal and run `uv --version` to verify).
 - Fully quit Claude Desktop (system tray on Windows, Cmd+Q on Mac) and reopen it.
